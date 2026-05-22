@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Paldea Jardim - gestao de catalogo.">
+    <title>Paldea Jardim | Gestao</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+    
+    <header class="navbar">
+        <div class="container nav-container">
+            <a class="brand" th:href="@{/catalogo}">
+                <span>Paldea</span>
+                <small style="color: var(--text-muted); font-weight: 400; font-size: 0.8rem; text-transform: uppercase;">Botanica Contemporanea</small>
+            </a>
+            <nav class="nav-links">
+                <a class="nav-item" th:href="@{/catalogo}">Catalogo</a>
+                <a class="nav-item active" th:href="@{/plantas}">Gestao</a>
+                <span class="nav-item" th:if="${usuario}" th:text="${usuario}">Equipe</span>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 3rem; padding-bottom: 5rem;">
+        
+        <div class="page-header" style="text-align: left; padding: 0 0 2rem 0;">
+            <span style="color: var(--primary); font-size: 0.8rem; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; display: block; margin-bottom: 0.5rem;">Operacao do Sistema</span>
+            <h1 class="page-title" style="font-size: 2.5rem;">Gestao de Catalogo</h1>
+            <p class="page-subtitle" style="margin: 0.5rem 0 0 0;">Uma central limpa e dinamica para gerenciar o inventario de forma direta.</p>
+        </div>
+
+        <div class="alert" th:if="${feedbackMessage}" th:classappend="${feedbackTone == 'success' ? 'alert-success' : 'alert-danger'}">
+            <strong th:text="'HTTP ' + ${feedbackStatus}">HTTP 200</strong>
+            <span th:text="${feedbackTitle}">Resultado da operacao</span>
+            <span style="font-size: 0.8rem;" th:text="${feedbackMessage}">Mensagem da operacao.</span>
+        </div>
+
+        <section class="dashboard-layout">
+            
+            <aside class="glass-panel" style="padding: 2rem;">
+                <div class="crud-switch" id="crudSwitch">
+                    <button class="crud-mode" type="button" data-mode="inserir">Criar</button>
+                    <button class="crud-mode" type="button" data-mode="atualizar">Atualizar</button>
+                    <button class="crud-mode" type="button" data-mode="buscar">Buscar</button>
+                    <button class="crud-mode" type="button" data-mode="apagar">Apagar</button>
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                    <h3 id="crudModeTitle" style="font-size: 1.5rem; margin-bottom: 0.5rem;">Cadastrar nova planta</h3>
+                    <p id="crudModeDescription" style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;">
+                        Inclua um item na colecao com nome, categoria, valor e descricao comercial.
+                    </p>
+                </div>
+
+                <form id="crudForm"
+                      th:action="@{/plantas/inserir}"
+                      method="post"
+                      th:attr="data-initial-mode=${!#strings.isEmpty(searchId) ? 'buscar' : (!#strings.isEmpty(deleteId) ? 'apagar' : (!#strings.isEmpty(plantForm.id) ? 'atualizar' : 'inserir'))},
+                               data-endpoint-inserir=@{/plantas/inserir},
+                               data-endpoint-atualizar=@{/plantas/atualizar},
+                               data-endpoint-buscar=@{/plantas/buscar},
+                               data-endpoint-apagar=@{/plantas/apagar}">
+                    
+                    <div class="form-group" data-field="id">
+                        <label for="crudId" class="form-label">Identificador (ID)</label>
+                        <input id="crudId" type="number" class="form-control" name="id" th:value="${!#strings.isEmpty(plantForm.id) ? plantForm.id : (!#strings.isEmpty(searchId) ? searchId : deleteId)}" placeholder="Ex.: 3">
+                    </div>
+
+                    <div class="form-group" data-field="nome">
+                        <label for="crudNome" class="form-label">Nome da Especie</label>
+                        <input id="crudNome" type="text" class="form-control" name="nome" th:value="${plantForm.nome}" placeholder="Ex.: Orquidea Bamboo">
+                    </div>
+
+                    <div class="form-group" data-field="categoria">
+                        <label for="crudCategoria" class="form-label">Categoria</label>
+                        <select id="crudCategoria" class="form-control" name="categoria">
+                            <option value="">Selecione</option>
+                            <option value="Folhagem" th:selected="${plantForm.categoria == 'Folhagem'}">Folhagem</option>
+                            <option value="Flores" th:selected="${plantForm.categoria == 'Flores'}">Flores</option>
+                            <option value="Aromaticas" th:selected="${plantForm.categoria == 'Aromaticas'}">Aromaticas</option>
+                            <option value="Ervas" th:selected="${plantForm.categoria == 'Ervas'}">Ervas</option>
+                            <option value="Suculentas" th:selected="${plantForm.categoria == 'Suculentas'}">Suculentas</option>
+                            <option value="Palmeiras" th:selected="${plantForm.categoria == 'Palmeiras'}">Palmeiras</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" data-field="preco">
+                        <label for="crudPreco" class="form-label">Preco</label>
+                        <input id="crudPreco" type="text" class="form-control" name="preco" th:value="${plantForm.preco}" placeholder="Ex.: 39,90">
+                    </div>
+
+                    <div class="form-group" data-field="descricao">
+                        <label for="crudDescricao" class="form-label">Descricao Comercial</label>
+                        <textarea id="crudDescricao" class="form-control" name="descricao" rows="4" th:text="${plantForm.descricao}" placeholder="Descreva a planta, ambiente ideal e apelo comercial."></textarea>
+                    </div>
+
+                    <div style="margin-top: 2rem;">
+                        <button id="crudSubmit" class="btn btn-primary btn-block" type="submit">Salvar planta</button>
+                        <p id="crudModeHint" style="color: var(--text-muted); font-size: 0.75rem; text-align: center; margin-top: 1rem;">A operacao atual usa somente os campos exibidos acima.</p>
+                    </div>
+                </form>
+            </aside>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Categoria</th>
+                        <th>Preco</th>
+                        <th>Descricao</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="plant : ${plants}">
+                        <td th:text="${plant.id}" style="color: var(--primary); font-weight: 700;">1</td>
+                        <td th:text="${plant.nome}">Nome</td>
+                        <td><span class="badge" th:text="${plant.categoria}" style="background: rgba(255,255,255,0.05); color: var(--text-muted);">Categoria</span></td>
+                        <td th:text="'R$ ' + ${#numbers.formatDecimal(plant.preco, 1, 'POINT', 2, 'COMMA')}" style="font-weight: 600;">R$ 0,00</td>
+                        <td th:text="${plant.descricao}" style="font-size: 0.875rem; color: var(--text-muted);">Descricao</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+    </main>
+
+    <script th:src="@{/app.js}" defer></script>
+</body>
+</html>
