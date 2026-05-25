@@ -18,7 +18,7 @@
             <nav class="nav-links">
                 <a class="nav-item" th:href="@{/catalogo}">Catalogo</a>
                 <a class="nav-item active" th:href="@{/plantas}">Gestao</a>
-                <span class="nav-item" th:if="${usuario}" th:text="${usuario}">Equipe</span>
+                <span class="nav-item visit-counter" th:text="'Visitas: ' + ${totalVisitas}">Visitas: 1</span>
             </nav>
         </div>
     </header>
@@ -32,9 +32,7 @@
         </div>
 
         <div class="alert" th:if="${feedbackMessage}" th:classappend="${feedbackTone == 'success' ? 'alert-success' : 'alert-danger'}">
-            <strong th:text="'HTTP ' + ${feedbackStatus}">HTTP 200</strong>
-            <span th:text="${feedbackTitle}">Resultado da operacao</span>
-            <span style="font-size: 0.8rem;" th:text="${feedbackMessage}">Mensagem da operacao.</span>
+            <span th:text="${feedbackMessage}">Mensagem da operacao.</span>
         </div>
 
         <section class="dashboard-layout">

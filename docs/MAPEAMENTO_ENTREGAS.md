@@ -21,13 +21,13 @@
 ## Entrega 2 - servidor web real com Spring MVC
 
 - Status: atendido
-- Onde aparece: controladores em `src/main/java/com/jardim/paldea/controller`
-- Como foi implementado: o projeto roda com Spring Boot e processa as paginas no servidor usando controllers e Thymeleaf.
+- Onde aparece: controladores em `src/main/java/com/jardim/paldea/controller`, formularios em `src/main/java/com/jardim/paldea/model` e helpers em `src/main/java/com/jardim/paldea/support`
+- Como foi implementado: o projeto roda com Spring Boot e processa as paginas no servidor usando controllers MVC simples, formularios Java e Thymeleaf.
 
 ## Entrega 2 - codigos HTTP pela regra de negocio
 
 - Status: atendido
-- Onde aparece: `src/main/java/com/jardim/paldea/controller/LoginController.java`, `src/main/java/com/jardim/paldea/controller/PlantController.java` e `src/test/java/com/jardim/paldea/PaldeaApplicationTests.java`
+- Onde aparece: `src/main/java/com/jardim/paldea/controller/LoginController.java` e `src/main/java/com/jardim/paldea/controller/PlantController.java`
 - Como foi implementado: operacoes validas retornam `200`, erros de entrada retornam `400` e registros inexistentes retornam `404`.
 
 ## Entrega 2 - manual para capturar headers
@@ -40,18 +40,18 @@
 ## Entrega 3 - requisicoes GET e POST por formularios
 
 - Status: atendido
-- Onde aparece: `src/main/resources/templates/catalogo.html`, `src/main/resources/templates/plantas.html`, `src/main/java/com/jardim/paldea/controller/ShowcaseController.java` e `src/main/java/com/jardim/paldea/controller/PlantController.java`
-- Como foi implementado: buscas e filtros usam `GET`, deixando parametros visiveis na URL (`/catalogo?promocaoStatus=...` e `/plantas/buscar?id=...`). Login e operacoes de cadastro usam `POST`, enviando dados pelo corpo da requisicao (`/login`, `/plantas/inserir`, `/plantas/atualizar` e `/plantas/apagar`).
+- Onde aparece: `src/main/resources/templates/login.html`, `src/main/resources/templates/catalogo.html`, `src/main/resources/templates/plantas.html`, `src/main/resources/static/app.js`, `src/main/java/com/jardim/paldea/controller/LoginController.java`, `src/main/java/com/jardim/paldea/controller/ShowcaseController.java` e `src/main/java/com/jardim/paldea/controller/PlantController.java`
+- Como foi implementado: acesso de paginas, buscas e filtros usam `GET`, deixando parametros visiveis na URL (`/login`, `/catalogo?promocaoStatus=...`, `/plantas` e `/plantas/buscar?id=...`). Login e operacoes de cadastro usam `POST`, enviando dados pelo corpo da requisicao (`/login`, `/plantas/inserir`, `/plantas/atualizar` e `/plantas/apagar`).
 
 ## Entrega 3 - persistencia com SESSION
 
 - Status: atendido
-- Onde aparece: `src/main/java/com/jardim/paldea/controller/LoginController.java`, `src/main/java/com/jardim/paldea/controller/ShowcaseController.java`, `src/main/java/com/jardim/paldea/controller/PlantController.java`, `src/main/resources/templates/catalogo.html` e `src/main/resources/templates/plantas.html`
-- Como foi implementado: apos login valido, o nome do usuario fica salvo na `HttpSession` com a chave `usuario`. Ao navegar entre paginas, os controllers leem essa sessao e enviam o usuario para as views, mantendo o estado de login sem obrigar novo acesso.
+- Onde aparece: `src/main/java/com/jardim/paldea/support/SessionHelper.java`, `src/main/java/com/jardim/paldea/controller/LoginController.java`, `src/main/java/com/jardim/paldea/controller/ShowcaseController.java` e `src/main/java/com/jardim/paldea/controller/PlantController.java`
+- Como foi implementado: apos login valido, o nome do usuario fica salvo na `HttpSession` com a chave `usuario`. As paginas de catalogo e gestao verificam essa sessao antes de carregar; sem sessao ativa, o usuario volta para `/login`.
 
 ## Entrega 3 - persistencia com COOKIE
 
-- Status: documentado para implementacao futura
-- Onde aparece: orientacao registrada neste mapeamento
-- Como implementar de forma direta: ler um cookie com `@CookieValue` e gravar uma preferencia simples no navegador com `HttpServletResponse#addCookie(...)`, por exemplo `idioma=pt-BR` ou `tema=escuro`.
-- Observacao de escopo: cookie nao foi implementado nesta rodada para manter o codigo simples, conforme decisao do projeto.
+- Status: atendido
+- Onde aparece: `src/main/java/com/jardim/paldea/support/VisitCookie.java`, `src/main/resources/templates/login.html`, `src/main/resources/templates/catalogo.html` e `src/main/resources/templates/plantas.html`
+- Como foi implementado: a cada login valido, o servidor incrementa o cookie `totalVisitas` e grava o novo valor no navegador com validade de 30 dias. Esse valor e exibido na navegacao das paginas.
+- Como validar: fazer login, abrir DevTools em Application > Cookies e conferir o cookie `totalVisitas`. Ao fechar e reabrir o navegador, o contador permanece salvo.

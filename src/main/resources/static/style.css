@@ -177,6 +177,11 @@ h1, h2, h3, h4 {
     background: rgba(0, 210, 135, 0.1);
 }
 
+.visit-counter {
+    border: 1px solid var(--glass-border);
+    color: var(--primary);
+}
+
 /* Buttons */
 .btn {
     display: inline-flex;
@@ -273,13 +278,11 @@ select.form-control option {
 
 /* Status / Alerts */
 .alert {
-    padding: 1rem;
-    border-radius: var(--border-radius-sm);
-    margin-bottom: 1.5rem;
-    font-size: 0.875rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+    padding: 0.65rem 0.85rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.82rem;
+    line-height: 1.4;
 }
 
 .alert-danger {
@@ -292,12 +295,6 @@ select.form-control option {
     background: rgba(0, 210, 135, 0.1);
     border: 1px solid rgba(0, 210, 135, 0.2);
     color: #2bed9e;
-}
-
-.alert-neutral {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--glass-border);
-    color: var(--text-muted);
 }
 
 /* Login Page Specifics */

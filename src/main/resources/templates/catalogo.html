@@ -18,7 +18,7 @@
             <nav class="nav-links">
                 <a class="nav-item active" th:href="@{/catalogo}">Catalogo</a>
                 <a class="nav-item" th:href="@{/plantas}">Gestao</a>
-                <span class="nav-item" th:if="${usuario}" th:text="${usuario}">Equipe</span>
+                <span class="nav-item visit-counter" th:text="'Visitas: ' + ${totalVisitas}">Visitas: 1</span>
             </nav>
         </div>
     </header>
@@ -26,9 +26,7 @@
     <main class="container" style="padding-top: 3rem; padding-bottom: 5rem;">
 
         <div class="alert alert-success" th:if="${feedbackMessage}" style="margin-bottom: 2rem;">
-            <strong th:text="'HTTP ' + ${feedbackStatus}">HTTP 200</strong>
-            <span th:text="${feedbackTitle}">Acesso liberado</span>
-            <span style="font-size: 0.8rem;" th:text="${feedbackMessage}">Mensagem de retorno.</span>
+            <span th:text="${feedbackMessage}">Mensagem de retorno.</span>
         </div>
         
         <section class="grid-2" style="margin-bottom: 4rem;">
@@ -56,6 +54,7 @@
 
                     <form th:action="@{/catalogo}" method="get">
                         <div class="form-group">
+                            <label for="promocaoStatus" class="form-label">Status da campanha</label>
                             <select id="promocaoStatus" name="promocaoStatus" class="form-control">
                                 <option value="ativa" th:selected="${promocaoStatus == 'ativa'}">Campanha Promocional Ativa</option>
                                 <option value="inativa" th:selected="${promocaoStatus == 'inativa'}">Campanha Regular Inativa</option>

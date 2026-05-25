@@ -11,6 +11,7 @@ Antes de começar os testes, garanta que o servidor está rodando localmente:
 1. Abra um terminal na pasta raiz do projeto.
 2. Execute o comando `.\mvnw.cmd spring-boot:run`.
 3. Acesse `http://localhost:8080/login`.
+4. Use as credenciais de demonstracao: `equipe@paldea.com` / `paldea123`.
 
 ---
 
@@ -22,8 +23,9 @@ Sempre mantenha a ferramenta de desenvolvedor aberta (pressione `F12`) na aba **
 
 Este cenário demonstra operações bem-sucedidas. 
 
-1. Faça o acesso via login com credenciais válidas ou navegue nas páginas de gestão (ex: inserir um novo item).
-2. O servidor processará e devolverá o código `200 OK` ou fará um redirecionamento `302 Found`.
+1. Faca o acesso via login com credenciais validas.
+2. Depois do login, navegue nas paginas de catalogo ou gestao (ex: inserir um novo item).
+3. O servidor processara e devolvera o codigo `200 OK` ou fara um redirecionamento `302 Found`.
 
 ![Acesso Concedido](./examples/login_success_200.jpg)
 
@@ -56,13 +58,40 @@ Este cenário avalia a resposta quando a aplicação procura por algo fora do ba
 
 ---
 
+## Validacao de Cookie
+
+### Cenario de Cookie: Contador de Visitas
+
+Este cenario comprova que uma informacao fica salva no navegador do usuario.
+
+1. Acesse `http://localhost:8080/login`.
+2. Faca login com as credenciais validas.
+3. Abra o DevTools em **Application > Cookies > http://localhost:8080**.
+4. Confira o cookie `totalVisitas`.
+5. Feche e reabra o navegador.
+6. Acesse novamente a aplicacao e confira que o contador continua salvo.
+
+Tambem e possivel validar no Network:
+
+- **Metodo**: `POST`
+- **URL**: `http://localhost:8080/login`
+- **Resultado esperado**: redirecionamento `302 Found` com header `Set-Cookie: totalVisitas=...`
+
+### Cenario de Sessao: Acesso Protegido
+
+1. Abra uma janela anonima ou limpe a sessao do navegador.
+2. Acesse `http://localhost:8080/catalogo` ou `http://localhost:8080/plantas`.
+3. O servidor deve redirecionar para `http://localhost:8080/login`.
+
+---
+
 ## 🚀 Validação via Postman
 
 Para certificar a consistência do servidor sem a renderização das telas HTML, repita os testes utilizando o Postman:
 
 ### Retornar 200 OK
 - **Método**: `GET`
-- **URL**: `http://localhost:8080/catalogo`
+- **URL**: `http://localhost:8080/login`
 - **Resultado Esperado**: `200 OK`
 
 ### Retornar 400 Bad Request
@@ -74,6 +103,7 @@ Para certificar a consistência do servidor sem a renderização das telas HTML,
 - **Resultado Esperado**: `400 Bad Request`
 
 ### Retornar 404 Not Found
+- **Pre-requisito**: estar com sessao ativa apos login valido
 - **Método**: `GET`
 - **URL**: `http://localhost:8080/plantas/buscar?id=999`
 - **Resultado Esperado**: `404 Not Found`

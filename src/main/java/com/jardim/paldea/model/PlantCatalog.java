@@ -24,17 +24,6 @@ public class PlantCatalog {
         return new ArrayList<>(plants);
     }
 
-    public List<Plant> findHighlightedPlants() {
-        List<Plant> highlightedPlants = new ArrayList<>();
-        int totalHighlights = Math.min(3, plants.size());
-
-        for (int index = 0; index < totalHighlights; index++) {
-            highlightedPlants.add(plants.get(index));
-        }
-
-        return highlightedPlants;
-    }
-
     public Plant findById(long id) {
         for (Plant plant : plants) {
             if (plant.getId() == id) {
