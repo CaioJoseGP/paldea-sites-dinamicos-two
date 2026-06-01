@@ -30,12 +30,6 @@
 - Onde aparece: `src/main/java/com/jardim/paldea/controller/LoginController.java` e `src/main/java/com/jardim/paldea/controller/PlantController.java`
 - Como foi implementado: operacoes validas retornam `200`, erros de entrada retornam `400` e registros inexistentes retornam `404`.
 
-## Entrega 2 - manual para capturar headers
-
-- Status: parcialmente atendido
-- Onde aparece: `MANUAL_VALIDACAO_HTTP.md`
-- Como foi implementado: o passo a passo do DevTools e do Postman foi documentado.
-- O que ainda falta para fechar com excelencia: inserir as capturas de tela reais no documento final.
 
 ## Entrega 3 - requisicoes GET e POST por formularios
 
@@ -55,3 +49,10 @@
 - Onde aparece: `src/main/java/com/jardim/paldea/support/VisitCookie.java`, `src/main/resources/templates/login.html`, `src/main/resources/templates/catalogo.html` e `src/main/resources/templates/plantas.html`
 - Como foi implementado: a cada login valido, o servidor incrementa o cookie `totalVisitas` e grava o novo valor no navegador com validade de 30 dias. Esse valor e exibido na navegacao das paginas.
 - Como validar: fazer login, abrir DevTools em Application > Cookies e conferir o cookie `totalVisitas`. Ao fechar e reabrir o navegador, o contador permanece salvo.
+
+## Entrega 4 - persistencia no banco com ORM
+
+- Status: atendido
+- Onde aparece: `application.properties`, `Plant.java`, `PlantRepository.java` e `PlantCatalog.java`.
+- Como foi implementado: a lista em memoria foi substituida pelo Spring Data JPA e Hibernate. A classe `Plant` virou uma `@Entity` e as operacoes de CRUD agora sao feitas por uma interface `PlantRepository` conectada a um banco MySQL local.
+- Como validar: iniciar o MySQL pelo XAMPP, iniciar o projeto, adicionar dados, desligar e religar a aplicacao para confirmar que os dados nao foram perdidos.

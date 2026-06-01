@@ -85,9 +85,6 @@ public class PlantForm {
         return Double.parseDouble(cleanPreco());
     }
 
-    public Plant toPlant(long id) {
-        return new Plant(id, cleanNome(), cleanDescricao(), cleanCategoria(), priceAsDouble());
-    }
 
     public String cleanNome() {
         return safe(nome);

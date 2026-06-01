@@ -1,44 +1,34 @@
 package com.jardim.paldea.model;
 
+import com.jardim.paldea.repository.PlantRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class PlantCatalog {
 
-    private final List<Plant> plants = new ArrayList<>();
-    private long nextId = 1L;
+    private final PlantRepository plantRepository;
 
-    public PlantCatalog() {
-        addInitialPlant("Samambaia Imperial", "Folhagem de sombra para ambientes internos e varandas.", "Folhagem", 42.90);
-        addInitialPlant("Lavanda Francesa", "Aromatica perfumada, ideal para canteiros ensolarados.", "Aromaticas", 28.00);
-        addInitialPlant("Rosa do Deserto", "Flor de alto impacto visual para vitrines e presentes.", "Flores", 36.50);
-        addInitialPlant("Suculenta Echeveria", "Pequena, resistente e perfeita para mesas e aparadores.", "Suculentas", 18.90);
-        addInitialPlant("Palmeira Rafis", "Composicao elegante para recepcoes e salas amplas.", "Palmeiras", 96.00);
-        addInitialPlant("Alecrim", "Erva fresca para culinaria e jardins sensoriais.", "Ervas", 14.50);
+    public PlantCatalog(PlantRepository plantRepository) {
+        this.plantRepository = plantRepository;
     }
 
     public List<Plant> findAll() {
-        return new ArrayList<>(plants);
+        return plantRepository.findAll();
     }
 
     public Plant findById(long id) {
-        for (Plant plant : plants) {
-            if (plant.getId() == id) {
-                return plant;
-            }
-        }
-
-        return null;
+        return plantRepository.findById(id).orElse(null);
     }
 
     public Plant create(PlantForm plantForm) {
-        Plant plant = plantForm.toPlant(nextId);
-        plants.add(plant);
-        nextId++;
-        return plant;
+        Plant plant = new Plant();
+        plant.setNome(plantForm.cleanNome());
+        plant.setDescricao(plantForm.cleanDescricao());
+        plant.setCategoria(plantForm.cleanCategoria());
+        plant.setPreco(plantForm.priceAsDouble());
+        return plantRepository.save(plant);
     }
 
     public Plant update(long id, PlantForm plantForm) {
@@ -51,7 +41,7 @@ public class PlantCatalog {
         plant.setDescricao(plantForm.cleanDescricao());
         plant.setCategoria(plantForm.cleanCategoria());
         plant.setPreco(plantForm.priceAsDouble());
-        return plant;
+        return plantRepository.save(plant);
     }
 
     public boolean delete(long id) {
@@ -60,12 +50,8 @@ public class PlantCatalog {
             return false;
         }
 
-        plants.remove(plant);
+        plantRepository.delete(plant);
         return true;
     }
-
-    private void addInitialPlant(String nome, String descricao, String categoria, double preco) {
-        plants.add(new Plant(nextId, nome, descricao, categoria, preco));
-        nextId++;
-    }
 }
+

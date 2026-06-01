@@ -8,7 +8,7 @@ public class VisitCookie {
 
     private static final String COOKIE_NAME = "totalVisitas";
 
-    // Entrega 3 - cookie simples: cada login valido incrementa o contador persistido no navegador.
+    // Entrega 3 - cookie simples
     public static void increment(HttpServletRequest request, HttpServletResponse response) {
         int totalVisits = current(request) + 1;
         Cookie cookie = new Cookie(COOKIE_NAME, String.valueOf(totalVisits));

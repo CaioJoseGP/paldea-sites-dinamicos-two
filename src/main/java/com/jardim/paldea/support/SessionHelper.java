@@ -10,6 +10,7 @@ public class SessionHelper {
         return session.getAttribute(USER_ATTRIBUTE) != null;
     }
 
+    // Entrega 3 - sessão simples
     public static void login(HttpSession session, String displayName) {
         session.setAttribute(USER_ATTRIBUTE, displayName);
     }
