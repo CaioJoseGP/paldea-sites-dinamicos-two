@@ -42,6 +42,13 @@ O teste de fogo para a persistência real ocorre fora do ambiente Java. Acessand
 
 *(Caso o servidor Java seja desligado e reiniciado, essa informação continuará acessível e será restaurada pelo sistema, comprovando que a memória RAM já não é mais a limitadora do projeto).*
 
+### 7. A Prova Final de Persistência (Restart do Servidor)
+Para finalizar a validação e comprovar que os dados sobreviveram ao ciclo de vida da aplicação:
+1. No terminal onde o Spring Boot está rodando, pressione `Ctrl+C` para matar o processo do servidor Java (a memória RAM do sistema será totalmente apagada).
+2. Execute o comando `.\mvnw.cmd spring-boot:run` novamente para religar o servidor.
+3. Acesse a rota `/catalogo` ou `/plantas` no navegador.
+4. **Resultado:** As plantas que você havia cadastrado no passo 4 continuarão sendo carregadas perfeitamente, provando que o banco de dados MySQL está mantendo os registros a salvo!
+
 ---
 
 ## Tecnologias Usadas
